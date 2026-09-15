@@ -6,9 +6,16 @@ public class App {
         
         libro.prestar();
         libro.devolver();
-        /*System.out.println("El titulo es: " + libro.obtenerTitulo());
-        System.out.println(libro.libroDisponible());
-        System.out.println("Libro creado correctamente");*/
+
+        System.out.println( "ID: " + libro.getId() + "\n" +
+                            "Título: " + libro.getTitulo() + "\n" +
+                            "Autor: " + libro.getAutor() + "\n" +
+                            "Año: " + libro.getAnio() + "\n" +
+                            "Disponible: " + (libro.isDisponible() ? "Sí" : "No") + "\n");
+
+        libro.setTitulo("El Hobbit: Un viaje inesperado");
+        libro.setAutor("J.R.R. Tolkien");
+        libro.setAnio(1937);
 
         System.out.println( "ID: " + libro.getId() + "\n" +
                             "Título: " + libro.getTitulo() + "\n" +

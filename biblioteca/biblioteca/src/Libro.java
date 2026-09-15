@@ -31,28 +31,47 @@ public class Libro {
     public String getTitulo(){
         return this.titulo;    
     }
+    public void setTitulo(String titulo){
+        this.titulo = titulo;    
+    }
 
     public String getAutor(){
         return this.autor;    
+    }
+    
+    public void setAutor(String autor){
+        this.autor = autor;    
     }
 
     public int getAnio(){
         return this.anio;    
     }
 
+    public void setAnio(int anio){
+        this.anio = anio;    
+    }
+
     public boolean isDisponible(){
         return this.disponible;
     }
 
-    public void prestar() {
+    public boolean prestar() {
 
-        if (this.disponible) {
+        if (this.disponible == true) {
             this.disponible = false;
+            return true;
         }
+
+        return false;
     }
 
-    public void devolver(){
-        this.disponible = true;
+    public boolean devolver(){
+        if (this.disponible == false) {
+            this.disponible = true;
+            return this.disponible;
+        }
+
+        return true;
     }
 
 
