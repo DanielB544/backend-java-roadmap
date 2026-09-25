@@ -16,4 +16,25 @@ public class Biblioteca {
         return new ArrayList<>(libros);
     }
 
+    public Libro buscarLibroPorId(int id){
+        for (Libro libro : libros) {
+            if(id == libro.getId()){
+                return libro;
+            }
+        }
+        return null;
+
+    }
+
+    public boolean eliminarLibroPorID(int id){
+        for ( int i = 0 ; i < libros.size() ;i++) {
+            
+            if(id == libros.get(i).getId()){
+                libros.remove(i);
+                return true;
+            }    
+            
+        }
+        return false;
+    }
 }

@@ -55,5 +55,49 @@ public class App {
         for (Libro libro : biblioteca.obtenerLibros()) {
             System.out.println(libro);
         }
+
+        //Buscar libro 2
+        System.out.println("Se esta buscando el libro 2");
+        Libro libroEncontrado = biblioteca.buscarLibroPorId(2);
+
+        if (libroEncontrado == null){
+            System.out.println("El libro con el Id ingresado no existe");
+        }else{
+            System.out.println(libroEncontrado);
+        }
+
+        //Buscar libro 99
+        System.out.println("Se esta buscando el libro 99");
+        Libro libroEncontrado2 = biblioteca.buscarLibroPorId(99);
+
+        if (libroEncontrado2 == null){
+            System.out.println("El libro con el Id ingresado no existe\n");
+        }else{
+            System.out.println(libroEncontrado2);
+        }
+
+        //Eliminar libro
+        Libro libroEliminar2 = biblioteca.buscarLibroPorId(99);
+        
+        if (libroEliminar2 == null){
+
+            System.out.println("El libro no existe");
+
+        }else{
+            System.out.println("\nPrimer libro a eliminar \n\n" + libroEliminar2);
+                
+            if(biblioteca.eliminarLibroPorID(libroEliminar2.getId())){
+                    
+                System.out.println("Libro Eliminado");
+
+            }else{
+                System.out.println("No se pudo eliminar el libro");
+            }
+        }
+
+
+
+        //Libro libroEliminar99 = biblioteca.buscarLibroPorId(99);
+        //System.out.println("Segundo libro a eliminar " + libroEliminar99);
     }
 }
