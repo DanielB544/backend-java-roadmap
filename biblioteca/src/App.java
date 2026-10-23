@@ -1,103 +1,122 @@
 public class App {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         // Crear libros
-        Libro libro1 = new Libro(1, "Hobbit", "J.R.R. Tolkien", 0, true);
-        Libro libro2 = new Libro(2, "Clean Code", "Robert C. Martin", 2008, true);
-        Libro libro3 = new Libro(3, "1984", "George Orwell");
-
-        // Probar préstamo y devolución
-        libro1.prestar();
-        libro1.devolver();
-
-        // Mostrar libro
-        System.out.println(
-            "ID: " + libro1.getId() + "\n" +
-            "Título: " + libro1.getTitulo() + "\n" +
-            "Autor: " + libro1.getAutor() + "\n" +
-            "Año: " + libro1.getAnio() + "\n" +
-            "Disponible: " + (libro1.isDisponible() ? "Sí" : "No") + "\n"
+        Libro libro1 = new Libro(
+                1,
+                "Hobbit",
+                "J.R.R. Tolkien",
+                1937,
+                true
         );
 
-        // Modificar datos mediante setters
-        libro1.setTitulo("El Hobbit: Un viaje inesperado");
-        libro1.setAutor("J.R.R. Tolkien");
-        libro1.setAnio(1937);
-
-        // Mostrar libro después de modificarlo
-        System.out.println(
-            "ID: " + libro1.getId() + "\n" +
-            "Título: " + libro1.getTitulo() + "\n" +
-            "Autor: " + libro1.getAutor() + "\n" +
-            "Año: " + libro1.getAnio() + "\n" +
-            "Disponible: " + (libro1.isDisponible() ? "Sí" : "No") + "\n"
+        Libro libro2 = new Libro(
+                2,
+                "Clean Code",
+                "Robert C. Martin",
+                2008,
+                true
         );
 
-        // Usar toString()
-        System.out.println(libro1);
-        System.out.println(libro2);
-        System.out.println(libro3);
+        Libro libro3 = new Libro(
+                3,
+                "1984",
+                "George Orwell"
+        );
 
         // Crear biblioteca
-        Biblioteca biblioteca = new Biblioteca();
 
-        // Agregar libros a la biblioteca
-        biblioteca.agregarLibro(libro1);
-        biblioteca.agregarLibro(libro2);
-        biblioteca.agregarLibro(libro3);
+        BibliotecaRepository bibliotecaRepository = new BibliotecaRepository();
+        BibliotecaService bibliotecaService = new BibliotecaService(bibliotecaRepository);
 
-        // Consultar cantidad de libros en la biblioteca
-        System.out.println("Cantidad de libros en la biblioteca: " + biblioteca.consultarCantidadLibros());
-    
-            
-        //Recorrer la lista de libros y mostrar sus detalles
-        for (Libro libro : biblioteca.obtenerLibros()) {
+        // Agregar libros
+        bibliotecaService.agregarLibro(libro1);
+        bibliotecaService.agregarLibro(libro2);
+        bibliotecaService.agregarLibro(libro3);
+
+        // Mostrar cantidad de libros
+        System.out.println(
+                "Cantidad de libros en la biblioteca: "
+                        + bibliotecaService.consultarCantidadLibros()
+        );
+
+        // Mostrar libros
+        System.out.println("\n--- LIBROS ---");
+
+        for (Libro libro : bibliotecaService.obtenerLibros()) {
             System.out.println(libro);
         }
 
-        //Buscar libro 2
-        System.out.println("Se esta buscando el libro 2");
-        Libro libroEncontrado = biblioteca.buscarLibroPorId(2);
+        // Buscar libro
+        System.out.println("\n--- BUSCAR LIBRO ---");
 
-        if (libroEncontrado == null){
-            System.out.println("El libro con el Id ingresado no existe");
-        }else{
+        int idBuscado = 2;
+        Libro libroEncontrado = bibliotecaService.buscarLibroPorId(idBuscado);
+
+        if (libroEncontrado == null) {
+            System.out.println(
+                    "El libro con el ID " + idBuscado + " no existe"
+            );
+        } else {
+            System.out.println("Libro encontrado:");
             System.out.println(libroEncontrado);
         }
 
-        //Buscar libro 99
-        System.out.println("Se esta buscando el libro 99");
-        Libro libroEncontrado2 = biblioteca.buscarLibroPorId(99);
+        // Actualizar libro
+        System.out.println("\n--- ACTUALIZAR LIBRO ---");
 
-        if (libroEncontrado2 == null){
-            System.out.println("El libro con el Id ingresado no existe\n");
-        }else{
-            System.out.println(libroEncontrado2);
+        boolean actualizado = bibliotecaService.actualizarLibro(
+                1,
+                "El Hobbit: Un viaje inesperado",
+                "J.R.R. Tolkien",
+                1937
+        );
+
+        if (actualizado) {
+            System.out.println("Libro actualizado correctamente");
+            System.out.println(bibliotecaService.buscarLibroPorId(1));
+        } else {
+            System.out.println("No se pudo actualizar el libro");
         }
 
-        //Eliminar libro
-        Libro libroEliminar2 = biblioteca.buscarLibroPorId(99);
-        
-        if (libroEliminar2 == null){
+        // Prestar libro 
+        System.out.println("\n--- PRESTAR LIBRO ---");
+        boolean prestarLibro1 = bibliotecaService.prestarLibro(1);
+        if (prestarLibro1) {
+            System.out.println("Libro prestado correctamente");
+        } else {
+            System.out.println("No se pudo prestar el libro");
+        }
 
-            System.out.println("El libro no existe");
+        // Devolver libro 
+        System.out.println("\n--- DEVOLVER LIBRO ---");
+        boolean devolverLibro1 = bibliotecaService.devolverLibro(1);
+        if (devolverLibro1) {
+            System.out.println("Libro devuelto correctamente");
+        } else {
+            System.out.println("No se pudo devolver el libro");
+        }
 
-        }else{
-            System.out.println("\nPrimer libro a eliminar \n\n" + libroEliminar2);
-                
-            if(biblioteca.eliminarLibroPorID(libroEliminar2.getId())){
-                    
-                System.out.println("Libro Eliminado");
+        // Eliminar libro
+        System.out.println("\n--- ELIMINAR LIBRO ---");
 
-            }else{
+        int idEliminar = 2;
+        boolean libroEliminar = bibliotecaService.eliminarLibroPorId(idEliminar);
+
+            if (libroEliminar) {
+                System.out.println("Libro eliminado correctamente");
+            } else {
                 System.out.println("No se pudo eliminar el libro");
             }
+
+        // Mostrar estado final de la biblioteca
+        System.out.println("\n--- BIBLIOTECA FINAL ---");
+
+        for (Libro libro : bibliotecaService.obtenerLibros()) {
+            System.out.println(libro);
         }
 
-
-
-        //Libro libroEliminar99 = biblioteca.buscarLibroPorId(99);
-        //System.out.println("Segundo libro a eliminar " + libroEliminar99);
+        
     }
 }

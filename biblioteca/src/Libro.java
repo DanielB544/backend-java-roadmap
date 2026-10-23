@@ -1,18 +1,22 @@
 import java.time.LocalDate;
 import java.util.Objects;
+
 public class Libro {
+
     private int id;
     private String titulo;
     private String autor;
     private int anio;
     private boolean disponible;
 
-    int anioActual = LocalDate.now().getYear();
-    
-    public Libro(){
+    private static final int ANIO_ACTUAL = LocalDate.now().getYear();
+
+    // Constructor vacío
+    public Libro() {
     }
 
-    public Libro(int id, String titulo, String autor, int anio, boolean disponible){
+    // Constructor completo
+    public Libro(int id, String titulo, String autor, int anio, boolean disponible) {
         this.id = id;
         setTitulo(titulo);
         setAutor(autor);
@@ -20,99 +24,119 @@ public class Libro {
         this.disponible = disponible;
     }
 
-    public Libro(int id, String titulo, String autor){
-        this(id,titulo,autor,0 , true);
+    // Constructor básico
+    public Libro(int id, String titulo, String autor) {
+        this(id, titulo, autor, 0, true);
     }
 
-    @Override
-    public String toString(){
-        return  "ID: " + this.id + "\n" + 
-                "Título : " + this.titulo + "\n" + 
-                "Autor: " + this.autor + "\n" +
-                "Año: " + this.anio + "\n" +
-                "Disponible: " + (this.disponible ? "Sí" : "No") + "\n";
-
+    // Getters
+    public int getId() {
+        return id;
     }
 
-    public int getId(){
-        return this.id;    
+    public String getTitulo() {
+        return titulo;
     }
 
-    public String getTitulo(){
-        return this.titulo;    
+    public String getAutor() {
+        return autor;
     }
 
-    public void setTitulo(String titulo){
-        if(titulo == null || titulo.isBlank() || titulo.length()<=0 || titulo.length()>100){
-            throw new IllegalArgumentException("El título no puede ser nulo o vacío");
+    public int getAnio() {
+        return anio;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    // Setters
+    public void setTitulo(String titulo) {
+
+        if (titulo == null || titulo.isBlank() || titulo.length() > 100) {
+            throw new IllegalArgumentException(
+                    "El título no puede ser nulo, vacío ni tener más de 100 caracteres"
+            );
         }
-        this.titulo = titulo;    
+
+        this.titulo = titulo;
     }
 
-    public String getAutor(){
-        return this.autor;    
-    }
-    
-    public void setAutor(String autor){
-        if(autor == null || autor.isBlank()|| autor.length()<=0 || autor.length()>100){
-            throw new IllegalArgumentException("El autor no puede ser nulo o vacío");
+    public void setAutor(String autor) {
+
+        if (autor == null || autor.isBlank() || autor.length() > 100) {
+            throw new IllegalArgumentException(
+                    "El autor no puede ser nulo, vacío ni tener más de 100 caracteres"
+            );
         }
-        this.autor = autor;    
+
+        this.autor = autor;
     }
 
-    public int getAnio(){
-        return this.anio;    
-    }
+    public void setAnio(int anio) {
 
-    public void setAnio(int anio){
-        if(anio<0 || anio>anioActual){
-            throw new IllegalArgumentException("El año debe ser un número positivo y no mayor al año actual");
+        if (anio < 0 || anio > ANIO_ACTUAL) {
+            throw new IllegalArgumentException(
+                    "El año debe estar entre 0 y " + ANIO_ACTUAL
+            );
         }
-        this.anio = anio;    
+
+        this.anio = anio;
     }
 
-    public boolean isDisponible(){
-        return this.disponible;
-    }
-
+    // Prestar libro
     public boolean prestar() {
 
-        if (this.disponible == true) {
-            this.disponible = false;
-            return true;
+        if (!disponible) {
+            return false;
         }
 
-        return false;
-    }
-
-    public boolean devolver(){
-        if (this.disponible == false) {
-            this.disponible = true;
-            return this.disponible;
-        }
-
+        disponible = false;
         return true;
     }
 
-    @Override 
-    public boolean equals(Object o){
-        if (this == o) return true;
+    // Devolver libro
+    public boolean devolver() {
 
-        if (o == null) return false;
+        if (disponible) {
+            return false;
+        }
 
-        if (getClass() != o.getClass()) return false;
+        disponible = true;
+        return true;
+    }
+
+    // Representación del libro
+    @Override
+    public String toString() {
+        return "ID: " + id + "\n"
+                + "Título: " + titulo + "\n"
+                + "Autor: " + autor + "\n"
+                + "Año: " + anio + "\n"
+                + "Disponible: " + (disponible ? "Sí" : "No") + "\n";
+    }
+
+    // Igualdad lógica
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Libro libro = (Libro) o;
 
-        if (this.titulo.equals(libro.titulo) && this.autor.equals(libro.autor)) return true;
-        
-        return false;
+        return Objects.equals(titulo, libro.titulo)
+                && Objects.equals(autor, libro.autor);
     }
 
-    @Override 
-    public int hashCode(){
-        return Objects.hash(titulo,autor);
+    // Hash compatible con equals()
+    @Override
+    public int hashCode() {
+        return Objects.hash(titulo, autor);
     }
-
-
 }
